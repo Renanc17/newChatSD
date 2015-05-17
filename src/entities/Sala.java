@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Sala {
 
-	
+	private int id;
 	private String nome;
 	private String descSala;
 	private User owner;
@@ -35,6 +35,12 @@ public class Sala {
 	}
 	public void setListaUser(List<User> listaUser) {
 		this.listaUser = listaUser;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

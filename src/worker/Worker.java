@@ -26,7 +26,7 @@ public class Worker {
 	private ObjectInputStream in;
 	private Socket rsSocket;
 	private Object aux;
-	private Sala sala;
+	private Sala sala = new Sala();
 
 	public Worker() {
 		this.port = 9009;
@@ -51,6 +51,14 @@ public class Worker {
 		this.user = user;
 	}
 
+	public Sala getSala() {
+		return sala;
+	}
+
+	public void setSala(Sala sala) {
+		this.sala = sala;
+	}
+
 	/**
 	 * Abre o socket e define o timeout.
 	 */
@@ -60,7 +68,7 @@ public class Worker {
 			serverSocket.setSoTimeout(timeout);
 			System.out.println("Servidor ativo e aguardando conexao.");
 		} catch (IOException e) {
-				port++;
+			port++;
 			System.out.println("Porta Ocupada, criando o socket na porta:" + port);
 		}
 	}
@@ -119,29 +127,31 @@ public class Worker {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (NullPointerException NP) {
-
 		}
 		sMessage = null;
 	}
-	
+
 	/**
 	 * Envia uma mensagem para o user.
+	 * 
 	 * @param ssMessage
 	 */
 	public void sendMessage(SimpleMessage ssMessage) {
-		try {
-			output.writeObject(ssMessage);
-			output.flush();
-			output.reset();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (ssMessage != null) {
+			try {
+				output.writeObject(ssMessage);
+				output.flush();
+				output.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
-	
-	
+
 	/**
 	 * Obtem a mensagem do user.
+	 * 
 	 * @return
 	 */
 	public SimpleMessage getMessage() {
@@ -151,18 +161,25 @@ public class Worker {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			user = null;
+			try {
+				rsSocket.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			System.out.println("Disconnect client!");
 		}
 		return sMessage;
 
 	}
-	
+
 	/**
 	 * Armazena os dados da sala que o user está.
+	 * 
 	 * @param sala
 	 */
-	public void entraNaSala(Sala sala){
-		this.sala = sala;
+	public void entraNaSala(Sala sala) {
+		this.setSala(sala);
 	}
 
 	/**
