@@ -10,6 +10,10 @@ import java.net.SocketTimeoutException;
 
 import entities.SimpleMessage;
 
+/**
+ * Classe responsável pela função Receiver do usuário.
+ *
+ */
 public class SimpleServer {
 
 	private ServerSocket serverSocket;

@@ -20,13 +20,13 @@ public class RunClient {
 		// A linha a seguir define um leitor de teclado
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		
-		System.out.println("Digite seu nickname: ");
+		System.out.print("Digite seu nickname: ");
 		try {
 			sMessage.setNickname(in.readLine());
 			sMessage.setMessage("Bem vindo " + sMessage.getNickname());
-			System.out.println("Endereco do centralServer: ");
+			System.out.print("Endereco do centralServer: ");
 			host = in.readLine();
-			System.out.println("Porta de acesso ao centralServer: ");
+			System.out.print("Porta de acesso ao centralServer: ");
 			port = Integer.parseInt(in.readLine());
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -35,7 +35,7 @@ public class RunClient {
 		// Crio o SimpleClient que conversa com o nosso servidor
 		SimpleClient client = new SimpleClient(host, port);
 		client.Connect();
-
+		
 		if (client.isConnected()) {
 			System.out.println("Cliente conectado.");
 			while (!sMessage.getMessage().trim().equalsIgnoreCase("CLOSE")) {

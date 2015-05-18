@@ -12,12 +12,17 @@ import java.net.SocketTimeoutException;
 import entities.Sala;
 import entities.SimpleMessage;
 import entities.User;
-
+/**
+ * Classe responsável por receber as mensagens 
+ * dos usuários, fornece-las para o servidor
+ * e enviar mensagens do servidor para o usuário.
+ *
+ */
 public class Worker {
 
 	private ServerSocket serverSocket;
 	private int port;
-	private String host = "192.168.1.44";
+	private String host;
 	private int timeout = 2000;
 	private User user;
 	private ObjectOutputStream output;
@@ -74,7 +79,7 @@ public class Worker {
 	}
 
 	/**
-	 * Abre o servidor e o coloca em espera de requisiÃ§Ãµes.
+	 * Abre o servidor e o coloca em espera de requisição.
 	 */
 	public void run() {
 		this.open();
@@ -82,7 +87,7 @@ public class Worker {
 	}
 
 	/**
-	 * Metodo que determina o inicio de atendimento a uma requisicao.
+	 * Metodo que define as configurações das funções do Worker.
 	 */
 	private void handleRequest() {
 
@@ -109,16 +114,15 @@ public class Worker {
 	}
 
 	/**
-	 * Gerencia uma requisicao atendida.
+	 * Método inicia o primeiro contato com o Receiver do usuário.
 	 * 
-	 * @param clientSocket
-	 *            - Socket produzido no accept.
 	 */
 	public void handleClient() {
 		try {
 			aux = in.readObject();
 			sMessage = (SimpleMessage) aux;
 			user.setNickname(sMessage.getNickname());
+			sMessage.setNickname("Server");
 			sendMessage(sMessage);
 
 		} catch (IOException e) {
@@ -132,7 +136,7 @@ public class Worker {
 	}
 
 	/**
-	 * Envia uma mensagem para o user.
+	 * Envia uma mensagem para o usuário.
 	 * 
 	 * @param ssMessage
 	 */
@@ -150,14 +154,15 @@ public class Worker {
 	}
 
 	/**
-	 * Obtem a mensagem do user.
+	 * Fornece as mensagens para o servidor.
 	 * 
-	 * @return
+	 * @return SimpleMessage
 	 */
 	public SimpleMessage getMessage() {
 		SimpleMessage sMessage = null;
 		try {
 			sMessage = (SimpleMessage) in.readObject();
+			sMessage.setNickname(user.getNickname());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -187,7 +192,7 @@ public class Worker {
 	 */
 	private void close() {
 		try {
-			System.out.println("Solicitacao de termino. Fechando o servidor.");
+			System.out.println("Solicitacao de termino. Fechando conexao.");
 			serverSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -7,34 +7,25 @@ import java.net.UnknownHostException;
 
 import entities.SimpleMessage;
 
+/**
+ * Classe responsável pela função Sender do Usuário.
+ *
+ */
 public class SimpleClient {
 	private Socket clientSocket;
-	private static final String DEFAULT_HOST = "localhost";
-	private static final int DEFAULT_PORT = 9009;
 	private String host;
 	private int port;
 	private ObjectOutputStream output;
 	
-	public SimpleClient() {
-		this.host = SimpleClient.DEFAULT_HOST;
-		this.port = SimpleClient.DEFAULT_PORT;
-	}
-
-	public SimpleClient(String host) {
-		this.host = host;
-		this.port = SimpleClient.DEFAULT_PORT;
-	}
-
-	public SimpleClient(int port) {
-		this.host = SimpleClient.DEFAULT_HOST;
-		this.port = port;
-	}
 
 	public SimpleClient(String host, int port) {
 		this.host = host;
 		this.port = port;
 	}
 
+	/**
+	 * Cria uma conexão com o Servidor.
+	 */
 	public void Connect() {
 		try {
 			clientSocket = new Socket(host,port);
@@ -47,12 +38,20 @@ public class SimpleClient {
 		}
 	}
 	
+	/**
+	 * Verifica se o usuário está connectado.
+	 * @return boolean
+	 */
 	public boolean isConnected() {
 		boolean result = false;
 		if (clientSocket!=null) result = clientSocket.isConnected();
 		return result;
 	}
-
+	
+	/**
+	 * Envia a mensagem do usuário para o servidor.
+	 * @param sMessage
+	 */
 	public void SendMessage(SimpleMessage sMessage) {
 		try {
 			output.writeObject(sMessage);
@@ -63,10 +62,9 @@ public class SimpleClient {
 		}
 	}
 	
-	public void readMessage() {
-		
-	}
-
+	/**
+	 * Fecha a conexão com o servidor.
+	 */
 	public void close() {
 		try {
 			clientSocket.shutdownOutput();

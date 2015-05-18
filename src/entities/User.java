@@ -1,5 +1,8 @@
 package entities;
-
+/**
+ * Entidade que armazena o registro do usuário.
+ *
+ */
 public class User {
 	
 	private String host;
